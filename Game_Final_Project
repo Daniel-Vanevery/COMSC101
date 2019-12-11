@@ -1,0 +1,538 @@
+//This program is an 'Choose Your Own Adventure Game'. Players will go through this game by choosing
+//mutliple choices answers, and depending on those answers will progress in this story. Some actions
+//could affect the players options depending on the users choices. This game uses primarily void
+//functions and if statements through the program.
+
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <thread>
+#include <chrono>
+
+using namespace std;
+
+//These are the functions that will help with slow printing text the beginning of the game
+using std::cout;
+using std::flush;
+using std::string;
+using std::this_thread::sleep_for;
+using std::chrono::milliseconds;
+void slow_print(const string&, unsigned int);
+
+// ----------------  First phase of Game  ----------------
+
+void gameIntro();
+
+void gotoBar1(); // Bar route void choices
+void choiceYes();
+void choiceNo();
+void hadEnough();
+void anotherDrink();
+void payHim();
+void waitforDraw();
+void shootHim();
+void shootHim2();
+void shootHimRes();
+void chance(int); // Random number choice generator
+void runAway();
+void acceptChallenge();
+void acceptChallenge2();
+
+void gotoStore1(); // Go to store route void choices
+void placetoStay();
+void placetoStay1();
+void saloon2();
+
+//----------------  Second phase of Game  ----------------
+
+void gameIntro2();
+
+//Answer choices for question from store owner
+void rightAns();
+void wrongAns();
+
+//Choices from taking money from store owner
+void takeMoney();
+void leaveMoney();
+
+//Escape Route choices, also end of game choices
+void dashtoTrain();
+void dashtoTrain1();
+void talktoThem();
+void bribe1();
+void bribe2();
+void shootMan1();
+void shootMan2();
+
+int main()
+{
+    string message = "Hello there! Before we start what is your name?\n\n";
+    string name;
+    slow_print(message, 50); //Show print texts in the string message with how fast it will print on screen
+    
+    cout << "Enter Name: ";
+    getline(cin, name); // getline uses to get users full name that will be printed on screen during greeting
+    
+    cout << "\n\nHello " << name <<"! Thank you for playing! Time to start the game!\n\n";
+    
+    string instuctions = "Here is some instructions to play the game. When prompted to choose a choice in the game, please select the multiple choice options that are displayed. It can be lower case, or upper case. Your answer will depend on what route you will be taken to the gaem. It can lead to instant death, or choices to lead you further in the game. If you choose an invalid choice that is not an option the game will end."; // Instructions on how to play the game
+    slow_print(instuctions, 50);
+    
+    cout << "Do you understand? Answer this question as an example.\n\nA) Yes B) Nae\n\nEnter: ";
+    char choice;
+    cin >> choice;
+    
+    if (choice == 'A' || choice == 'a')
+        cout << "Great! continue to the game!\n\n"; // If user chooses 'Yes' option, this will display
+    else
+        cout << "You'll get it futher in the game.\n\n"; // If user uses 'Nae' option this will appear
+    
+    gameIntro(); // Game introduction in phase one of the game.
+    
+    string intro = "You notice when you first arrive at the town that it is some what empty. After a couple of seconds you start hearing\nmusic. You look towards your left and you notice a local Saloon. Right across from the Saloon,towards your right,\nyou notice the local store that the letter mentioned.\n\n";
+    
+    slow_print(intro, 50); // Used to slow print text when displaying
+    
+    cout << "Where do you choose to go?\n";
+    cout << "Type either 'A' for Saloon or 'B' for Store\n\n";
+    
+    char choice1; // variable for user to choose choice
+    cout << "Choice: "; cin >> choice1; // Prompts user to enter choice
+    
+    //If function used to direct where the user will go in the story based on there choice
+    if (choice1 == 'A' || choice1 == 'a')
+        gotoBar1();
+    else if (choice1 == 'B' || choice1 == 'b')
+        gotoStore1();
+    else
+        cout << "While you stand there, unable to make a choice. You see a random figure come up to you and shoots you, shoots you dead. You end up dying.\n\nGame Over"; // Throught the game if the user makes and invaild choice, they will automatically die and end the game
+    
+    
+    return 0;
+}
+
+//Intro message void
+void gameIntro()
+{
+    string message = "One day you are sitting on a train, heading into a small unknown town. You are holding an envelope in your hand. Only a couple of minutes till you arrive at the small unknown town that you never heard of. While the train is slowing down, you get up from your seat and and step out the train with a few passagers following you. You look at the clock, it's around dusk time. You open the envelope, and it reads \"Go to the local store to retrive package\".\n\n";
+    
+    slow_print(message, 50); // function to print text in string message and display characters (letters) slowly on screen
+}
+
+//Void for slow print function for text to appear slowly on screen
+void slow_print(const string& message, unsigned int millis_per_char)
+{
+    // Range loops are "for each" constructs; here: for each character in the string
+    for (const char c: message)
+    {
+        // flush is used to make sure the buffer is emptied to the terminal immediately
+        cout << c << flush;
+        
+        // Ask the thread to sleep for at least n millis.
+        sleep_for(milliseconds(millis_per_char));
+    }
+}
+
+//----------------  G a m e  v o i d s  p h a s e  o n e  s e c t i o n  b e l o w  ----------------
+
+//Part One (Bar scene Paths) voids
+void gotoBar1()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n"; // Uses this in the beginning of functions for easy to follow and where to start to read when choices are made
+    cout << "\n\nYou decided that you have some time to spare, even though the store is closing soon, one drink can not hurt right? You head inside the local saloon. When you enter, you notice that barely anybody inside except for the 4 people that you see: A bartender, someone sitting at the bar, a pianist, and someone sleeping at a table in the middle of the room.You head towards the bar counter, and you notice the person sitting at the counter, just staring at you. You sense a bad vibe with this person, so you try to ignore him. When you sit down at the counter, you still feel uneasy. You look at the man, but try not to make it look obvious. Bartender comes up to you if you want a drink.";
+
+    cout << "\n What do you choose?\n\n";
+    cout << "A) Yes sir, whiskey, please" << "\t\t" << "B) I'll pass, thank you";
+    char choice; // Char variable used
+    
+    cout << "\n\nEnter: "; cin >> choice; // User will choose where to go by selecting options
+    
+    if (choice == 'a' || choice == 'A')
+        choiceYes(); //Direct user to void choiceYes if they choose to take a drink, to progress in the game
+    else if (choice == 'b' || choice == 'B')
+        choiceNo(); //Direct user to void choiceNo if they choose not to get a drink,to progress to this route in the game
+    else
+        cout << "\n\nYou sit there, saying nothing. The bartender looks suspicious. and walks away. While the man staring at you is still looking at you. When the bartender comes back, he pulls out a gun and shoots you.\n\n Game Over."; // If user chooses and invalid choice, game will end
+    
+    
+}
+
+void choiceYes()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nThe bartender gives you a drink. You drink it, and notice the man staring at you across the bar is still looking at you. You ignore it for now. Couple seconds go by, and you cant help but feel to look over at the man again. So, you do a quick glance. What you notice is that he is whispering to the bartender. The bartender comes up to you and ask if you would like another drink, on the house since he knows you are visiting the town. You hear the man across from you cough, and you look at him. Notice he is not looking at you when you do this. But when you are about to look away, he quickly looks at the bartender smiling. What do you say about the free drink?\n\nA)No thank you.I think I had enough for tonight \t\t B) Sure, thank you\n\n";
+
+    char choice;
+    
+    cout << "Enter: "; cin >> choice;
+    if (choice == 'a' || choice == 'A')
+         hadEnough();
+    else if (choice == 'b' || choice == 'B')
+         anotherDrink();
+    else
+        cout << "\n\nYou are unable to decide and start feeling odd. Bartender ask if everything is already, but you don't respond. You start to cough up blood, and eye sight is getting blurry. You fall to the floor only to realize that you have been poisoned. Within minutes you pass out, and end up dying.\n\n Game Over :(";
+
+}
+
+void choiceNo()
+{
+    char choice;
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------";
+    
+    cout << "\n\nWhile the bartender is confused, because you came into a saloon without wanting to drink. You hear the man who been eyeing you the whole time say\n\n Unknown Man: Arent you that lone wanderer, fella? You have a pretty bounty on your head.\n\n Confused you respond\n\n You: Well, I am a lone wanderer at the moment, but I aint the man you think I am. You must have me confused with someone else mister. I want no trouble, just in town to grab some supplies from the local store.\n\n He nonchalantly pulls out his pistol, pointing it at you and says\n\n Unknown Man - Well, I aint gonna risk being wrong. We can do this the easy way, or the hard way. Which will it be? Ill even give you a choice. \n\nYou see that the man is a cocky type of person.\n\n You are wanted dead or alive, the same price either way, and I will give a chance for freedom. You can either dual me outside, or pay me handsomely. Which will it be Mister? \n\n A)Accept his challenge \t\t B) Pay him";
+    
+    cout << "\n\nEnter: "; cin >> choice;
+    
+    if (choice == 'a' || choice == 'A')
+        acceptChallenge();
+    else if (choice == 'b' || choice == 'B')
+        payHim();
+    else
+        cout << "\n\nYou sit there, saying nothing. The bartender looks suspicious. and walks away. While the man staring at you is still looking at you. When the bartender comes back, he pulls out a gun and shoots you.\n\n Game Over.";
+    
+}
+
+void hadEnough() // When user only accepts one drink at bar
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nThe bartender nods at you, looks at the unknown man and walks off. All of a sudden you hear the man who has been eyeing you the whole time say\n\nUnknown Man: Huh, wise choice I suppose. Arent you that lone wanderer, fella? You have a pretty bounty on your head.\n\nConfused you respond with:\n\nYou: Well, I am a lone wanderer at the moment, but I aint the man you think I am. You must have me confused with someone else mister. I aint want no trouble, just in town to grab some supplies from the local store.\n\nHe nonchalantly pulls out his pistol, pointing it at you and says:\n\nUnknown Man: Well, I aint gonna risk being wrong. We can do this the easy way, or the hard way. Which will it be? I will even give you a choice.\n\nYou see that the man is a cocky type of person\n\nYou are wanted dead or alive, the same price either way, and I will give a chance for freedom. You can either dual me outside, or pay me handsomely. Which will it be Mister Lone Wanderer?\n\nA)Accept his challenge\t\tB) Pay him";
+    
+    char choice;
+    
+    cout << "\n\nEnter: "; cin >> choice;
+    
+    if (choice == 'a' || choice == 'A')
+        acceptChallenge2();
+    else if (choice == 'b' || choice == 'B')
+        payHim();
+    else
+        cout << "\n\nYou sit there, saying nothing. The bartender looks suspicious. and walks away. While the man staring at you is still looking at you. When the bartender comes back, he pulls out a gun and shoots you.\n\n Game Over.";
+}
+
+void anotherDrink() // Happens when user accepts second offer of drink at bar
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nAnother drink! The bartender nods him head, and you see him wink at the unknown man staring at you.\n\nBartender: He you go, mister\n\nYou: Thank you very kindly *you say in a raspy drunken voice*\n\nUnknown Man: Lone Wanderer, huh. How are you an outlaw?\n\nYou feel insulted\n\nYou: And who the hell are you?!\n\nUnknown Man: Ha, I knew it! That is all I need to know.\n\n You hear a gun shot on your shoulder and fall over.\n\nYou: You are dead! \n\nYou fumble for your gun, but start thowing up.\n\n Unknown Man:I am Deputy Ranson, I am here to arrest yo-\n\nYou punch him in his groin and puke on his legs.\n\nDeputy Ranson:I'll avoid all this mess, you are wanted dead or alive anyway.\n\nDeputy Ranson points his gun at you and fires. You are dead\n\nGame Over :(";
+    
+}
+
+
+void payHim()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nTell him that you will pay him instead. Ask what the cost is, and he tells you. You walk towards him and hand him the money. He waves his gun to the direction to the door. You assume he wants you out, you do as he says since you dont want any trouble. As you are walking out, you hear a bang. You look down, and slowly turn around. You notice the man with his gun pointed at you. He throws the money you just handed him at you, and shoots you three more times. You fall to the floor.\n\nGame Over.";
+    
+    cout << " :(";
+    return;
+}
+
+void waitforDraw()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nYou wait for him to draw first. When you look at his hand, then back to his face, you hear a gunshot. You fall down, noting that he shot your knees. He pulls out his pistol, and shooting at will, some missing, and some hit your torso. In pain, you are unable to move due to the shock. He walks up to you, while reloading, he tosses a bullet at you.\n\nDeputy Ranson: Next one is coming faster boy.\n\nHe shoots you in the head.\n\nGame Over :(";
+
+    return;
+}
+
+void shootHim()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nStare him in the eyes, right when he makes a wince in his eye, without hesitation you pull out and shoot him. He falls to the floor, you don’t know where you shot him. Walking closer you keep shooting. You kill Deputy Ranson.";
+
+    placetoStay1();
+}
+void shootHim2() // This path is taken when user accepts the one drink when first arriving at the bar route
+{
+    //Random number generator
+    srand( static_cast<unsigned int>(time(nullptr)));
+    
+    //Computers random number generator and void display prompt
+    int cpuNum = (rand() % 4) + 1;
+     chance(cpuNum);
+}
+
+void shootHimRes() // This path is taken when user accepts the one drink when first arriving at the bar route
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nYou pull out your pistol and fire three shots, missing all of them. Deputy Ranson looks spooked for a second, and wildly fires back. He misses all his shots. You count 6 shots, he is out. You reload your shots quickly, but drop one of the bullets that you tried to put in the chamber. You have five bullets. You shoot 2 in his direction while he is reloading, causing him to drop his gun. It is over, and he knows it. He looks at you while you hold your gun up to his head.\n\nDeputy Ranson: Well I will be damned, you are better than they say, huh?\n\nYou: You made a scene, I can not allow that\n\nDeputy Ranson: Well do what you...\n\nYou shoot him mid sentence. You kill Deputy Ranson.\n\n";
+    
+    placetoStay1();
+}
+
+void gameover()
+{
+    cout <<"\n\nYou fumble for your gun, but you end up dropping it and falling. While this happens, Ransons shoots you with a clean shot. You end up dying.\n\n Game Over :(";
+}
+
+void chance(int number)
+{    switch(number) //Switch statement use for random number generator will lead to determine which route user will be taken to. Only happens if user took one drink
+    {
+        case 1: shootHimRes();
+        break;
+        
+        case 2: shootHimRes();
+        break;
+        
+        case 3: shootHim();
+        break;
+            
+        case 4: cout <<"\n\nYou fumble for your gun, but you end up dropping it and falling. While this happens, Ransons shoots you with a clean shot. You end up dying.\n\n Game Over :(";
+            break;
+        
+        default: gameover();
+            
+    }
+    }
+
+void runAway()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nYou try to run, but because of unknown reasons you trip and fall. Deputy Ranson notices that you are trying to pull a quick one.\n\nDeputy Ranson: YOU NOT GOING ANYWHERE SON!\n\nHe pulls out his pistol, and shooting at will, some missing, and some hit your torso. In pain, you are unable to move due to the shock. He walks up to you, while reloading, he tosses a bullet at you.\n\nDeputy Ranson: Next one is coming faster boy.\n\nHe shoots you in the head.\n\nGame Over :(";
+
+    return;
+}
+
+void acceptChallenge()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nYou accept his dual and he smirks.\n\n Unknown Man: Well, I am  a fair man, I know that I am the best shooter in town. Let me get down to your level.\n\nHe takes a couple of shots of his drink. And starts walking outside. You can tell this man is cocky. When outside you ask for his name.\n\nUnknown Man: Ah, want to know the name of the man who is gonna kill you? The name is Deputy Ranson.\n\n You recognize that name, he is one of the corrupt notorious law enforcements around in this county. Known not only for being corrupt, but being one of the top shooters around. You watch him walking from behind. Clearly you can tell that he is a bit buzzed.You both walks towards the middle of the road. You turn to each others backs, and walk ten paces, then turn to each other. What do you do?\n\nA) Wait for him to draw \t B) Shoot at him \t C) Run away";
+    
+    char choice;
+    
+    cout << "\nEnter: "; cin >> choice;
+    
+    if (choice == 'a' || choice == 'A')
+        waitforDraw();
+    else if (choice == 'b' || choice == 'B')
+        shootHim();
+    else if(choice == 'C' || choice == 'c')
+        runAway();
+    else
+        cout << "\n\nYou were unable to make a choice. While you were there thinking, you are shot multiple times. You fall to the floor and die. /n/nGame Over :(";
+}
+
+
+void acceptChallenge2()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nYou accept his dual and he smirks.\n\n Unknown Man: Well, I am  a fair man, I know that I am the best shooter in town. Let me get down to your level.\n\nHe takes a couple of shots of his drink. And starts walking outside. You can tell this man is cocky. When outside you ask for his name.\n\nUnknown Man: Ah, want to know the name of the man who is gonna kill you? The name is Deputy Ranson.\n\n You recognize that name, he is one of the corrupt notorious law enforcements around in this county. Known not only for being corrupt, but being one of the top shooters around. You watch him walking from behind. Clearly you can tell that he is a bit buzzed, but so are you. Not even sure if you can shoot in this state, that drink did seem stronger than usual. But at the same time it has been a while since you tasted liquor. You both walks towards the middle of the road. You turn to each others backs, and walk ten paces, then turn to each other. For one drink, your chances are 50/50. What do you do?\n\nA) Wait for him to draw \t B) Shoot at him \t C) Run away\n\n";
+    
+    char choice;
+    
+    cout << "Enter: "; cin >> choice;
+    
+    if (choice == 'a' || choice == 'A')
+        waitforDraw();
+    else if (choice == 'b' || choice == 'B')
+        shootHim2();
+    else if(choice == 'C' || choice == 'c')
+        runAway();
+    else
+        cout << "\n\nYou were unable to make a choice. While you were there thinking, you are shot multiple times. You fall to the floor and die. /n/nGame Over :(";
+}
+
+
+
+
+
+//Part One (Go to store) void paths
+
+void gotoStore1()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nYou decide that it is best to get what you need and leave as soon as possible, it is getting late, and the store might be closing soon. You head over to the store and out notice that there is a sign that reads: -Closed, will be open tomorrow morning-\n\n Well, you can either take a trip to the bar or look for a place to stay, as you do not want to take another trip back home.\n\n";
+   
+    cout << "Where do you choose to go?\n\n";
+    cout << "A) Find a place to stay \t B) Saloon";
+    char choice;
+    
+    
+    cout << "\n\nEnter: "; cin >> choice;
+    if (choice == 'a' || choice == 'A')
+        placetoStay();
+    else if (choice == 'b' || choice == 'B')
+         saloon2();
+    else
+        cout << "\n\nWhile you stand there, unable to make a choice. You see a random figure come up to you and shoots you, shoots you dead. You end up dying.\n\nGame Over";
+}
+
+void placetoStay()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nYou decide that a drink is not worth it, since you been sober for a couple months. You wander around town for a bit, noticing the lack of human presence. After a walk down the road, you notice a hotel. You walk in, and you see a young woman at the front desk.\n\nYou: Hello, a room for a night please.\n\nYoung Woman: Yes sir, sign in this book please.\n\nYou: Sure thing\n\nYou write your information for the room\n\nYoung Woman: Usually we would ask for payment after, but recently we have to ask for payment before.\n\nYou: How much?\n\nYoung Woman: One dollar mister.\n\nYou pull out some money and you have exact. You hand the young lady your money and she shows you to your room. You sleep for the night.";
+    
+    
+    
+    gameIntro2();
+    
+}
+
+void placetoStay1()
+{
+    cout << "\n\nAfter the dual, you leave the body there and look for a place to stay. You wander around town for a bit, noticing the lack of human presence. After a walk down the road, you notice a hotel. You walk in, and you see a young woman at the front desk. \n\nYoung Woman: You are the man who killed the Deputy right?\n\nYou: Yes ma-am. I’m looking for a room to rent for the night, how much?\n\nYoung Woman: Nothing sir, I hated that man and what he did to my mother. I-\n\nYou: No need to explain miss, it has been a day, as you can imagine.\n\nYoung Woman: Yes mister, right this way.\n\nShe shows you to the room, silence the whole time. And you go to sleep.\n";
+    
+    gameIntro2();
+}
+
+void saloon2()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "\n\nYou decide that since you can not go to the bar, that you will grab a drink before finding a place to stay. You start walking toward the saloon and a man walks out for a smoke. He looks at you, and you look back at him. While he lights up a cigarette, you notice a deputys badge on him. You just nod your head at him, and decide that law enforcement this late mixed with liquor does not mix well. You decide to find a place to stay instead. While walking away you hear a couple gunshots, you look back and the deputy is not outside anymore. Seems like something is happening at the bar. Better hurry and leave, so you do not get caught up in anything. You notice after a while that someone is staring at you, you just nod your head towards the person. It is dark, and you look suspicious, you think to yourself. You pay no attention.";
+    
+    placetoStay();
+    
+}
+
+//----------------  G a m e  v o i d s  p h a s e  t w o  s e c t i o n  b e l o w  ----------------
+
+void gameIntro2()
+{
+    cout << "\n\nYou wake up hearing loud thumps. You hear a man banging on your door saying\n\nMan:Past, Present Future!\n\nClearly he is drunk.\n\nMan: *Yesterday, today tomorrow*! Three days straight?!\n\nHe repeats this four times until you get frustrated. You open the door, and tells him to go somewhere else. He looks at you wide eye and starts to laugh\n\nMan:You are him! You-\n\nYou pull out your pistol and tell him to leave. He continues to laugh while he stumbles away. For some reason what he said sticks in your mind. Past, present, future. Yesterday, today, tomorrow. What does that mean? Doesn’t matter, you get ready, leave the key at the front counter, and head towards the store. It is almost noon. You have been sleeping for a while, while the town is still somewhat dead. You enter the store and you see a middle aged man. He looks he has seen some rough times, scraggly beard, dirty face, ripped old clothes. You walk up to him to speak to him\n\nYou: Hello mister, I am here to pick up an item.\n\nOwner: I get a lot of things mister, gotta be more specific than that.\n\nYou pull out an envelope and show him the letter. It has a weird scribble on it, unsure what it was, it couldnt be a signature, looks like a child scribble on a piece of paper randomly.\n\nOwner: That lone wanderer fella huh? Yeah, yeah I got your package. ID yourself?\n\nYou: Sure, but how?\n\nOwner: You ran with my son before he died a couple years. He always had this question thing he would ask people before robbing or killing them. He thought it was so fun, but it was annoying. Only few people who ran with him and are alive know the answer. I’m guessing you know it.\n\nYou do remember what he would always ask, and right when you think of the question the old man says it\n\nOwner: Can you name three consecutive days without using the words Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday? You only have one chance to answer. Some people tried to claim this pick up, but none looked like you or showed proof. I can not be certain. Since I am telling you this, if you are wrong, I will have to get rid of you.\n\nHe pulls out a rifle and points it at you.\n\nOwner: What is your answer?\n\nStunned, you look around, and you see a sign that says: Past, Present, Future. That sounds familiar, from this morning? That man? Owner looks impatient. You say your answer.\n\n";
+    
+    
+       cout << "A) Past, Present, Future\t";
+       cout << "B) This is ridiculous!\t";
+       cout << "C) Yesterday, today, tomorrow";
+        char choice;
+        
+     
+        cout << "\n\nYour Answer: ";
+        cin >> choice;
+        if (choice == 'c' || choice == 'C')
+          rightAns();
+        else
+        wrongAns();
+}
+
+void rightAns()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "He smirks at you, and a sigh of relief.\n\nOwner: Thank god you got it right. I hate killing, and I left that life behind. You cause me a lot of trouble just to hold on to this package, but I owe him a favor.\n\nYou: Him?\n\nOwner: Forget it, here you go.\n\nHe hands you the package. It is small, and you put it in your pocket. It barely fits. You thank the man, he grunts and turns about to go to the back of the store. You see some money on the counter. Do you take it?\n\nA) Take the money\t\tB) Leave the money";
+    
+    char choice;
+    
+    cout << "\n\nEnter: "; cin >> choice;
+    if (choice == 'a' || choice == 'A')
+        takeMoney();
+    else if (choice == 'b' || choice == 'B')
+         leaveMoney();
+    else
+        cout << "\n\n After a time of staring at his money, the owner comes back and sees you looking at his money. Slowly taking out his rifle again saying\n\nOwner: So, you planning to steal from me, even after helping you?!\n\nYou: No, I was just-\n\nHe interrupts you\n\nOwner: I do not need a sorry excuse from you, you are all the same!\n\nYou see the anger on his face before he fires at you. Clean shot through your chest, you do not survive this shot. You died\n\nGame Over :(";
+}
+
+void wrongAns()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "He looks at you disappointed.\n\nOwner: Look even if you are right or wrong guy. I dont like killing. I left that life behind. I let previously let people go if I thought it was the right man, but you have gone so far. I cannot let people know any type of hints of knowing the answer. I know this is not fair for not remembering something dumb like that, but it is my only lead. I am sincerely sorry for this.\n\nHe pulls the trigger and kills you on the spot.\n\n Game Over :(";
+}
+
+void takeMoney()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You decide to take the money, it’s not much, but hey. You walk outside. Right when you head out you see wanted posters for the lone wanderer, with your face on them. You see a gang of law enforcement walking around. You think to yourself what is going on? You cover half your face with your scarf and tilt your hat lower than usual. You overhear some of the law enforcement people taking\n\nLaw Enforcement: Alright everybody, we got word that Deputy Ranson was killed yesterday! Get this man dead or alive! I do not care, he was spotted here late last night walking, and he came here by train. This town is dead around this time around, he did not leave yet. FIND HIM!\n\nShoot, you say to yourself quietly, you try not to be scene. There are roughly about a dozen people. The train just arrives. You hurry to the train, but not looking suspicious.\n\nLaw Enforcement: Hey mister! We want to ask you some questions.\n\nYou stop with your back towards them. The train does not stop at this town for very long, since no one usually stops here, or gets on. The platform is empty, except with one officer standing at the entrance. What do you do?\n\nA) Shoot and dash towards the train \tB) Turn around and talk to them.";
+    
+    char choice;
+    
+    cout << "\n\nEnter: "; cin >> choice;
+    if (choice == 'a' || choice == 'A')
+        dashtoTrain();
+    else if (choice == 'b' || choice == 'B')
+         talktoThem();
+    else
+        cout << "You say nothing to them while they quickly pull out their pistols and aim them at you.\n\nLaw Enforcement: DO NOT MOVE, OR YOU WILL BE SHOT!\n\nYou ignore there warning, and quickly pull out your pistol, but you are not quick enough. They open fire, shooting you multiple times in the back. You do not survive the shooting and end up dying.\n\nGame Over :(";
+}
+
+void leaveMoney()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You do not want to be rude, since the man was helping you. You leave the money and walk out. Right when you head out you see wanted posters for the lone wanderer, with your face on them. You see a gang of law enforcement walking around. You think to yourself what is going on? You cover half your face with your bandana and tilt your hat lower than usual. You overhear some of the law enforcement people taking\n\nLaw Enforcement: Alright everybody, we got word that Deputy Ranson was killed yesterday! Get this man dead or alive! I do not care, he was spotted here late last night walking, and he came here by train. This town is dead around this time around, he did not leave yet. FIND HIM!\n\nShoot, you say to yourself quietly, you try not to be scene. There are roughly about a dozen people. The train just arrives. You hurry to the train, but not looking suspicious.\n\nLaw Enforcement: Hey mister! We want to ask you some questions.\n\nYou stop with your back towards them. The train does not stop at this town for very long, since no one usually stops here, or gets on. The platform is empty, except with one officer standing at the entrance. What do you do?\n\nA) Shoot and dash towards the train \t B) Turn around and talk to them.";
+    
+    char choice;
+    
+    cout << "\n\nEnter: "; cin >> choice;
+    if (choice == 'a' || choice == 'A')
+        dashtoTrain1();
+    else if (choice == 'b' || choice == 'B')
+         talktoThem();
+    else
+        cout << "You say nothing to them while they quickly pull out their pistols and aim them at you.\n\nLaw Enforcement: DO NOT MOVE, OR YOU WILL BE SHOT!\n\nYou ignore there warning, and quickly pull out your pistol, but you are not quick enough. They open fire, shooting you multiple times in the back. You do not survive the shooting and end up dying.\n\nGame Over :(";
+
+}
+
+void dashtoTrain()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You decide that you cannot waste time. You have a clean shot at the enforcement officer at the entrance. It has been a while since you had to fire your weapon. You hear the people behind you walking closer to you, calling out.\n\nLaw Enforcement: HEY, can YOU HEAR me?!\n\nYou waste no time, quick draw your pistol, and shoot towards the officer at the train entrance, clean hit, he falls over. Quickly you turn around the fire two more shots at the law enforcement officers behind you. They do not fire back, but run for cover. The other law enforcement heard you. You dash towards the train. You hear gun fire in your direction, but none of them  hit you. You fire three more shots towards them behind you, just to keep them in place. You make it to the train, you see the train conductor staring at you with a gun. You think to yourself, since when do they get guns? You have to make a quick decision.\n\nA) Bribe\t B) Shoot man";
+    
+    char choice;
+    
+    cout << "\n\nEnter: "; cin >> choice;
+    if (choice == 'a' || choice == 'A')
+        bribe2();
+    else if (choice == 'b' || choice == 'B')
+         shootMan2();
+    else
+        cout << "You are standing there unable to decide what to do. While this is happening, you notice the gun fire stopped for a while now, it is quiet. You feel a gun barrel on the back of your head.\n\nLaw Enforcement Officer: Got ya.\n\nYou are caputured\n\nGame Over :(";
+}
+
+void dashtoTrain1()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You decide that you cannot waste time. You have a clean shot at the enforcement officer at the entrance. It has been a while since you had to fire your weapon. You hear the people behind you walking closer to you, calling out.\n\nLaw Enforcement: HEY, can YOU HEAR me?!\n\nYou waste no time, quick draw your pistol, and shoot towards the officer at the train entrance, clean hit, he falls over. Quickly you turn around the fire two more shots at the law enforcement officers behind you. They do not fire back, but run for cover. The other law enforcement heard you. You dash towards the train. You hear gun fire in your direction, but none of them  hit you. You fire three more shots towards them behind you, just to keep them in place. You make it to the train, you see the train conductor staring at you with a gun. You think to yourself, since when do they get guns? You have to make a quick decision.\n\nA) Bribe\t B) Shoot man";
+    
+    char choice;
+    
+    cout << "\n\nEnter: "; cin >> choice;
+    if (choice == 'a' || choice == 'A')
+        bribe1();
+    else if (choice == 'b' || choice == 'B')
+         shootMan1();
+    else
+        cout << "You are standing there unable to decide what to do. While this is happening, you notice the gun fire stopped for a while now, it is quiet. You feel a gun barrel on the back of your head.\n\nLaw Enforcement Officer: Got ya.\n\nYou are caputured\n\nGame Over :(";
+    
+    
+}
+
+void talktoThem()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You slow turn around, hoping they wont recognize you.\n\nYou:How can I help you fellas?\n\nLaw Enforcement: We have some questions to ask you\n\nYou see them put their hands on their pistols You slowly inch your hands to yours, but full pull out their weapons and point it at you.\n\nLaw Enforcement: DO NOT MOVE!  We got reports that a man wearing your outfit was walking around alone at night, after the death of Deputy Ranson. You think because you are covering your face that we would not be able to figure you out? In an empty town like this?\n\nOne of the officers walk up to you slowly to pull down your bandana.\n\nLaw Enforcement: Well, I will be damned, it you, huh? Hands up, you are under arrest\n\nWhile this is happening, the rest of the law enforcement team surrounds you, guns pointed out. You have no chance to escape. You are captured.\n\nGame Over :(";
+    
+}
+
+void bribe1()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You do not have any money on you, wishing you took the money from the store. You put your hands up and ask the conductor\n\nYou: Look mister, I aint looking for trouble.\n\nConductor: I highly doubt that, since you are sweating and running from the gunfight I hear outside, who are you!\n\nYou: Look, what do you want for you to look away?\n\nConductor: You got money?\n\nYou: No sir, what else can I give you?\n\nHe notices a your pocket watch.\n\nConductor: What is that right there?\n\nYou slowly pull out your watch.\n\nConductor:Is… is that what I-\n\nYou interrupt.\n\nYou:Yes, you know how much it’s worth? I’ll give it to ya. Enough for your kids to live off of.\n\nYou hand him the pocket watch. While this is happening, the train starts moving. Surprised this whole time the law did not make it to the train.You escape from the town. You look for a seat, and the conductor points at an empty seat for you to sit at. You sit down, exhausted, alone. You pull out the package that you retrieved. Decided to open in to see what it is. You open it. At first you look in confusion, then mad that you almost died for this. Lastly, just smile softly. It was worth it.\n\n\nYou Survived, End Game! Thank you for playing!";
+    
+    char choice;
+       
+       cout << "\n\nEnter: "; cin >> choice;
+       if (choice == 'a' || choice == 'A')
+           bribe2();
+       else if (choice == 'b' || choice == 'B')
+            shootMan2();
+       else
+           cout << "You are standing there unable to decide what to do. While this is happening, you notice the gun fire stopped for a while now, it is quiet. You feel a gun barrel on the back of your head.\n\nLaw Enforcement Officer: Got ya.\n\nYou are caputured\n\nGame Over :(";
+}
+
+void bribe2()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You show the conductor man the money you stole off the counter from the store.\n\nYou: I do not know what is going on out there, I just need to get on, I was always on the train.\n\nThe conductor looks at you, and pockets the money. Right after that moment the train starts moving. You escape from the town. You look for a seat, and the conductor points at an empty seat for you to sit at. You sit down, exhausted, alone. You pull out the package that you retrieved. Decided to open in to see what it is. You open it. At first you look in confusion, then mad that you almost died for this. Lastly, just smile softly. It was worth it.\n\nYou Survived, End Game! Thank you for playing name! :D ";
+}
+
+void shootMan1()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You see the man hand shaking, he has no experience with guns. You point your pistol at his head.\n\nYou: I see that you are shaking, let us not do this mister. I aint no killer any more.\n\nConductor: You are obviously dangerous, not to me, but these fine people right here.\n\nYou: Look, my men are coming from the gun fight outside, you can fight all of them off? You some type of gun slinger?\n\nOne of the law enforcement officers bravely seizes the moment to rush on to the train pointing his gun inside. Startled, the conductor fires at the man, and he falls off the train, you take advantage at the moment and fire at the conductor once. Clean shot, he falls over dead. When this happens the train starts moving. No one bats an eye at you, since they were taking cover from the bullets flying wildly everywhere. You sit down, exhausted, alone. You pull out the package that you retrieved. Decided to open in to see what it is. You open it. At first you look in confusion, then mad that you almost died for this. Lastly, just smile softly. It was worth it.\n\nYou Survived, End Game! Thank you for playing name! :D";
+
+}
+
+void shootMan2()
+{
+    cout << "------------------------  R E A D  F R O M  H E R E  ------------------------\n";
+    cout << "You point at the man and fire at his shoulder. You do not want to kill him. The passengers on that cart scream. You see the conductor reaching for his gun. You yell for him to stop, and fire again. You only hear a click. You are out of ammo. The conductor is shaking, clearly inexperience with his gun. He aims at you, while you drop your weapon to surrender, he shoots you, cleanly. Game Over :(";
+
+}
+
